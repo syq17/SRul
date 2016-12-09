@@ -1,0 +1,13 @@
+.*
+!.gitignore
+target
+*.iml
+*.project
+.settings/
+*.classpath
+unity-credit-api/.gitignore
+unity-credit-core/.gitignore
+unity-credit-interface/.gitignore
+unity-credit-service/.gitignore
+logs/
+bin/
