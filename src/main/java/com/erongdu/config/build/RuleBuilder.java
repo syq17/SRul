@@ -1,11 +1,14 @@
 package com.erongdu.config.build;
 
+import com.erongdu.config.condition.Condition;
+import com.erongdu.config.rule.Rule;
+
 /**
  * Interface for building an Object
- *
+ * <p>
  * Created by syq on 2016/12/8.
  */
-public interface RuleBuilder<O> {
+public interface RuleBuilder<H, O extends Rule<H>> {
 
 
     /**
@@ -15,5 +18,11 @@ public interface RuleBuilder<O> {
      * @throws Exception if an error occurred when building the Object
      */
     O build() throws Exception;
+
+    /**
+     * 获取该规则中的条件类型
+     * @return
+     */
+//    abstract Class<? extends Condition> getConditionClassType();
 
 }

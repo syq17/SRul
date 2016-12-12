@@ -1,5 +1,7 @@
 package com.erongdu.config.build;
 
+import com.erongdu.config.condition.Condition;
+import com.erongdu.config.rule.Rule;
 import com.erongdu.exception.RuleBuildException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>
  * Created by syq on 2016/12/8.
  */
-public abstract class AbstractRuleBuilder<O> implements RuleBuilder<O> {
+public abstract class AbstractRuleBuilder<H, O extends Rule<H>> implements RuleBuilder<H, O> {
 
     private AtomicBoolean building = new AtomicBoolean();
 
@@ -32,6 +34,9 @@ public abstract class AbstractRuleBuilder<O> implements RuleBuilder<O> {
      * @throws Exception if an error occurs
      */
     protected abstract O doBuild() throws Exception;
+
+
+
 
 
     /**
