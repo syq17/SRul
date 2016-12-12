@@ -18,18 +18,26 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
 
-        String load = "a:1";
+        Map<String,Integer> load = new HashMap<>();
+        load.put("博士",3);
+        load.put("硕士",2);
+        load.put("学士",1);
 
         StringRuleBuilder stringRuleBuilder = new StringRuleBuilder(1, "education");
 
 
         Map<String, String> conditionMap = new HashMap<>();
-        conditionMap.put("<", "本科");
-        conditionMap.put(">", "博士");
+        conditionMap.put(">=", "学士");
+        conditionMap.put(">=", "博士");
 
-        StringRule rule = stringRuleBuilder.rulePolicy(RulePolicy.MATCHALL).preLoad(load)
+        StringRule rule = stringRuleBuilder.rulePolicy(RulePolicy.MATCHONE).preLoad(load)
                 .conditionManagement().createConditions(conditionMap).build();
-        rule.match("博士");
+
+        rule.matchTo("学士");
+
+        rule.beginMatch();
+
+        System.out.println(rule.result());
 
 
     }

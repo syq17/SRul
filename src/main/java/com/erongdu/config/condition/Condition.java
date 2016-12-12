@@ -8,7 +8,7 @@ import com.erongdu.utils.ConditionOpt;
 /**
  * Created by syq on 2016/12/11.
  */
-public interface Condition<T, O extends Rule<T>, B extends RuleBuilder<T, O>, H extends RuleConfigurerAdapter<T, O, B>> {
+public interface Condition<T> {
 
     /**
      * 设置操作符
@@ -16,7 +16,7 @@ public interface Condition<T, O extends Rule<T>, B extends RuleBuilder<T, O>, H 
      * @param opt
      * @return
      */
-    Condition<T, O, B, H> opt(ConditionOpt opt);
+    Condition<T> opt(ConditionOpt opt);
 
 
     /**
@@ -25,15 +25,20 @@ public interface Condition<T, O extends Rule<T>, B extends RuleBuilder<T, O>, H 
      * @param t
      * @return
      */
-    Condition<T, O, B, H> value(T t);
+    Condition<T> value(T t);
 
+
+    ConditionOpt getOpt();
+
+
+    T getValue();
 
     /**
      * 返回构造器实例
      *
      * @return
      */
-    B finish();
+//    B finish();
 
 
     /**
@@ -41,6 +46,6 @@ public interface Condition<T, O extends Rule<T>, B extends RuleBuilder<T, O>, H 
      *
      * @return
      */
-    H then();
+//    H then();
 
 }

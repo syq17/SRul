@@ -1,6 +1,12 @@
 package com.erongdu.config.rule;
 
+import com.erongdu.config.condition.Condition;
+import com.erongdu.exception.RuleValueException;
+import com.erongdu.utils.RulePolicy;
+
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by syq on 2016/12/11.
@@ -8,13 +14,13 @@ import java.math.BigDecimal;
 public class NumRule extends AbstractRule<BigDecimal> {
 
 
-    @Override
-    public boolean result() {
-        return false;
+    public NumRule(List<Condition<BigDecimal>> conditions, RulePolicy policy, Map<BigDecimal, Integer> preLoad) {
+        super(conditions, policy, preLoad);
     }
 
-    @Override
-    public void match(BigDecimal bigDecimal) {
 
+    @Override
+    public boolean beginMatch() throws RuleValueException {
+        return false;
     }
 }

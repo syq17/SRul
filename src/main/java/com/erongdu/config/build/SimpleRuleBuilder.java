@@ -5,9 +5,11 @@ import com.erongdu.config.rule.Rule;
 import com.erongdu.exception.RuleBuildException;
 import com.erongdu.utils.RulePolicy;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 简单规则构造类
@@ -18,7 +20,7 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
 
     protected RulePolicy rulePolicy = RulePolicy.MATCHALL;//该规则的策略，可选项，默认为全匹配
 
-    protected String load;//预加载项，可选项
+    protected Map<H, Integer> load;//预加载项，可选项
 
     protected String name;//规则名称，可选项
 
@@ -72,13 +74,15 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
     /**
      * 规则的预加载数据，比如字符串比对时所依赖的判断依据
      *
-     * @param load
+     * @param loadMap
      * @return
      */
-    public SimpleRuleBuilder<H, O> preLoad(String load) {
-        this.load = load;
+    public SimpleRuleBuilder<H, O> preLoad(Map<H, Integer> loadMap) {
+        this.load = loadMap;
         return this;
     }
+
+
 
     /**
      * 规则名称
@@ -94,10 +98,12 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
 
     @Override
     protected O doBuild() throws Exception {
-        O oInstance = this.oClazz.newInstance();
-        List<Condition<H, O, SimpleRuleBuilder<H, O>, ConditionManagementConfigurer<H, O, SimpleRuleBuilder<H, O>>>> list = this.configurerAdapter.getConditions();
-        oInstance.conditions(list);
-        oInstance.policy(this.rulePolicy);
+        Constructor<O> constructor = this.oClazz.getConstructor(List.class, RulePolicy.class, Map.class);
+        List<Condition<H>> list = this.configurerAdapter.getConditions();
+        O oInstance = constructor.newInstance(list, this.rulePolicy, this.load);
+        oInstance.setId(this.id);
+        oInstance.setColumn(this.column);
+        oInstance.setName(this.name);
         return oInstance;
     }
 

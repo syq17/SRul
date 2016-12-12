@@ -3,9 +3,11 @@ package com.erongdu.config.rule;
 import com.erongdu.config.build.RuleBuilder;
 import com.erongdu.config.build.RuleConfigurerAdapter;
 import com.erongdu.config.condition.Condition;
+import com.erongdu.exception.RuleValueException;
 import com.erongdu.utils.RulePolicy;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 规则类总接口
@@ -27,24 +29,40 @@ public interface Rule<T> {
      *
      * @param t
      */
-    public void match(T t);
+    public void matchTo(T t) throws RuleValueException;
 
 
     /**
-     * 设置所有的条件
+     * 获取该规则的id
      *
-     * @param conditions
+     * @return
      */
-    public <O extends Rule<T>, B extends RuleBuilder<T, O>, H extends RuleConfigurerAdapter<T, O, B>> void conditions
-    (List<Condition<T, O, B, H>> conditions);
+    public long id();
 
 
     /**
-     * 设置匹配策略
+     * 获取该规则的目标字段名
      *
-     * @param rulePolicy
+     * @return
      */
-    public void policy(RulePolicy rulePolicy);
+    public String column();
+
+    /**
+     * 获取该规则的名称
+     *
+     * @return
+     */
+    public String name();
+
+
+    public void setId(long id);
+
+    public void setColumn(String column);
+
+    public void setName(String name);
+
+
+    public boolean beginMatch() throws RuleValueException;
 
 
 }
