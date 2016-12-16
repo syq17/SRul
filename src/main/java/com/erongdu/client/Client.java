@@ -21,10 +21,20 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
 
+
+
+        /*应该为，造出一个builder，这个builder可以为一类的rule进行多次的构建，不应该一个builder对应一条规则*/
+
+
         Map<String, Integer> load = new HashMap<>();
         load.put("博士", 3);
         load.put("硕士", 2);
         load.put("学士", 1);
+
+
+
+
+
 
         StringRuleBuilder stringRuleBuilder = new StringRuleBuilder(1, "education");
 
