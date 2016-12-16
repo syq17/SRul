@@ -1,27 +1,12 @@
 package com.erongdu.config.rule;
 
-import com.erongdu.config.build.RuleBuilder;
-import com.erongdu.config.build.RuleConfigurerAdapter;
-import com.erongdu.config.condition.Condition;
 import com.erongdu.exception.RuleValueException;
-import com.erongdu.utils.RulePolicy;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * 规则类总接口
  * Created by syq on 2016/12/11.
  */
 public interface Rule<T> {
-
-
-    /**
-     * 传入待验证的值，由实现类来决定是否匹配规则
-     *
-     * @return
-     */
-    public boolean result();
 
 
     /**
@@ -53,13 +38,6 @@ public interface Rule<T> {
      * @return
      */
     public String name();
-
-
-    public void setId(long id);
-
-    public void setColumn(String column);
-
-    public void setName(String name);
 
 
     public boolean beginMatch() throws RuleValueException;

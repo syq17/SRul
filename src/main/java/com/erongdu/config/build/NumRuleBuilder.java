@@ -14,5 +14,4 @@ public final class NumRuleBuilder extends SimpleRuleBuilder<BigDecimal, NumRule>
     }
 
 
-
 }

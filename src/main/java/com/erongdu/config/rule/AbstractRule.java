@@ -1,9 +1,6 @@
 package com.erongdu.config.rule;
 
-import com.erongdu.config.build.RuleBuilder;
-import com.erongdu.config.build.RuleConfigurerAdapter;
 import com.erongdu.config.condition.Condition;
-import com.erongdu.exception.RuleValueException;
 import com.erongdu.utils.RulePolicy;
 
 import java.util.List;
@@ -12,7 +9,7 @@ import java.util.Map;
 /**
  * Created by syq on 2016/12/12.
  */
-public abstract class AbstractRule<T> implements Rule<T> {
+public abstract class AbstractRule<T> implements Rule<T>, RuleInfo {
 
 
     protected List<Condition<T>> conditions;
@@ -22,7 +19,6 @@ public abstract class AbstractRule<T> implements Rule<T> {
 
     protected Map<T, Integer> preLoad;
 
-    public boolean isMatch;
 
     public long id;
 
@@ -37,12 +33,6 @@ public abstract class AbstractRule<T> implements Rule<T> {
         this.conditions = conditions;
         this.policy = policy;
         this.preLoad = preLoad;
-    }
-
-
-    @Override
-    public boolean result() {
-        return isMatch;
     }
 
 
@@ -81,4 +71,5 @@ public abstract class AbstractRule<T> implements Rule<T> {
     public void matchTo(T s) {
         this.matchTo = s;
     }
+
 }

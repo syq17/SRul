@@ -3,6 +3,7 @@ package com.erongdu.config.build;
 import com.erongdu.config.condition.Condition;
 import com.erongdu.config.condition.ConditionItem;
 import com.erongdu.config.rule.Rule;
+import com.erongdu.config.rule.RuleInfo;
 import com.erongdu.exception.RuleBuildException;
 import com.erongdu.utils.RulePolicy;
 
@@ -16,7 +17,7 @@ import java.util.Map;
  * 简单规则构造类
  * Created by syq on 2016/12/9.
  */
-public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRuleBuilder<H, O> {
+public abstract class SimpleRuleBuilder<H, T extends Rule<H>> extends AbstractRuleBuilder<H, Rule<H>> {
 
 
     protected RulePolicy rulePolicy = RulePolicy.MATCHALL;//该规则的策略，可选项，默认为全匹配
@@ -29,9 +30,9 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
 
     protected String column;//目标字段名
 
-    protected Class<O> oClazz;
+    protected Class<? extends RuleInfo> oClazz;
 
-    private ConditionManagementConfigurer<H, O, SimpleRuleBuilder<H, O>> configurerAdapter;//条件配置器
+    private ConditionManagementConfigurer<H, Rule<H>, SimpleRuleBuilder<H, T>> configurerAdapter;//条件配置器
 
 
     private ConditionItem<H> conditionItem;
@@ -44,7 +45,7 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
         this.column = column;
 
         Type type = getClass().getGenericSuperclass();
-        this.oClazz = (Class<O>) ((ParameterizedType) type).getActualTypeArguments()[1];
+        this.oClazz = (Class<? extends RuleInfo>) ((ParameterizedType) type).getActualTypeArguments()[1];
     }
 
 
@@ -53,7 +54,7 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
      *
      * @return
      */
-    public ConditionManagementConfigurer<H, O, SimpleRuleBuilder<H, O>> conditionManagement() {
+    public ConditionManagementConfigurer<H, Rule<H>, SimpleRuleBuilder<H, T>> conditionManagement() {
         if (configurerAdapter == null) {
             this.configurerAdapter = new ConditionManagementConfigurer<>();
             this.configurerAdapter.setBuilder(this);
@@ -76,7 +77,7 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
      * @param policy
      * @return
      */
-    public SimpleRuleBuilder<H, O> rulePolicy(RulePolicy policy) {
+    public SimpleRuleBuilder<H, T> rulePolicy(RulePolicy policy) {
         if (policy == null) throw new RuleBuildException("policy cannot be null");
         this.rulePolicy = policy;
         return this;
@@ -89,7 +90,7 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
      * @param loadMap
      * @return
      */
-    public SimpleRuleBuilder<H, O> preLoad(Map<H, Integer> loadMap) {
+    public SimpleRuleBuilder<H, T> preLoad(Map<H, Integer> loadMap) {
         this.load = loadMap;
         return this;
     }
@@ -101,22 +102,22 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
      * @param name
      * @return
      */
-    public SimpleRuleBuilder<H, O> name(String name) {
+    public SimpleRuleBuilder<H, T> name(String name) {
         this.name = name;
         return this;
     }
 
 
+
     @Override
-    protected O doBuild() throws Exception {
-        Constructor<O> constructor = this.oClazz.getConstructor(List.class, RulePolicy.class, Map.class);
+    @SuppressWarnings("All")
+    protected Rule<H> doBuild() throws Exception {
+        Constructor<? extends RuleInfo> constructor = this.oClazz.getConstructor(List.class, RulePolicy.class, Map.class);
         List<Condition<H>> list = this.configurerAdapter.getConditions();
-        O oInstance = constructor.newInstance(list, this.rulePolicy, this.load);
+        RuleInfo oInstance = constructor.newInstance(list, this.rulePolicy, this.load);
         oInstance.setId(this.id);
         oInstance.setColumn(this.column);
         oInstance.setName(this.name);
-        return oInstance;
+        return (Rule<H>) oInstance;
     }
-
-
 }

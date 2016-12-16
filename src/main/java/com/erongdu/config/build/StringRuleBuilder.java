@@ -15,9 +15,4 @@ public final class StringRuleBuilder extends SimpleRuleBuilder<String, StringRul
     /*需要一个构造condition参数的方法，注意，不能是hashMap类型，不然操作符将会被覆盖掉*/
 
 
-
-
-
-
-
 }

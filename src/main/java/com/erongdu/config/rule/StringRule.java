@@ -14,12 +14,6 @@ import java.util.Set;
 /**
  * 一个简单的字符串规则实体表达类
  * 该规则中只能对一个字符串含义的规则字段进行设置
- * 只有
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
  * Created by syq on 2016/12/11.
  */
 public final class StringRule extends AbstractRule<String> {
@@ -67,21 +61,17 @@ public final class StringRule extends AbstractRule<String> {
                     throw new RuleValueException("opt : " + opt + " is not accepted! ");
             }
         }
-
+        boolean isMatch = false;
         if (policy == RulePolicy.MATCHALL) {
-            if (matchSet.contains(false)) {
-                this.isMatch = false;
-            } else {
-                this.isMatch = true;
+            if(!matchSet.contains(false)){
+                isMatch = true;
             }
         } else if (policy == RulePolicy.MATCHONE) {
             if (matchSet.contains(true)) {
-                this.isMatch = true;
-            } else {
-                this.isMatch = false;
+                isMatch = true;
             }
         }
-        return this.isMatch;
+        return isMatch;
     }
 
 

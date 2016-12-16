@@ -5,9 +5,7 @@ import com.erongdu.config.build.StringRuleBuilder;
 import com.erongdu.config.condition.ConditionItem;
 import com.erongdu.config.core.RulesExecutor;
 import com.erongdu.config.core.RulesLogic;
-import com.erongdu.config.rule.NumRule;
 import com.erongdu.config.rule.Rule;
-import com.erongdu.config.rule.StringRule;
 import com.erongdu.utils.RulePolicy;
 
 import java.math.BigDecimal;
@@ -34,15 +32,11 @@ public class Client {
         conditionItem.add(">=", "学士");
         conditionItem.add(">=", "博士");
 
-        StringRule rule = stringRuleBuilder.rulePolicy(RulePolicy.MATCHONE).preLoad(load)
+        Rule<String> rule = stringRuleBuilder.rulePolicy(RulePolicy.MATCHONE).preLoad(load)
                 .conditionManagement().createConditions(conditionItem).build();
 
         rule.matchTo("学士");
-
-//        rule.beginMatch();
-//
-//        System.out.println(rule.result());
-
+        System.out.println(rule.beginMatch());
 
         NumRuleBuilder numRuleBuilder = new NumRuleBuilder(2, "age");
 
@@ -50,13 +44,15 @@ public class Client {
         conditionItem2.add(">=", new BigDecimal(20));
         conditionItem2.add(">=", new BigDecimal(30));
 
-        NumRule rule2 = numRuleBuilder.rulePolicy(RulePolicy.MATCHALL).conditionManagement().createConditions(conditionItem2).build();
+        Rule<BigDecimal> rule2 = numRuleBuilder.rulePolicy(RulePolicy.MATCHALL).conditionManagement().createConditions(conditionItem2).build();
 
-        rule2.matchTo(new BigDecimal(10));
+        rule2.matchTo(new BigDecimal(30));
 
-//        rule2.beginMatch();
-//
-//        System.out.println(rule2.result());
+
+        System.out.println(rule2.beginMatch());
+
+
+        rule2.beginMatch();
 
         List<Rule> list = new ArrayList<>();
         list.add(rule);
@@ -68,9 +64,6 @@ public class Client {
         Map<Long, Boolean> resultMap = rulesLogic.rulesResult();
         System.out.println(resultMap);
 
-
-//        rulesLogic.doLogic();
-//        rulesLogic.rulesResult();
     }
 
 

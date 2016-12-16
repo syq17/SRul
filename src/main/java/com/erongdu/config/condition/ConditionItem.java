@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 条件收集器
+ * 非线程安全类
  * Created by syq on 2016/12/13.
  */
 public class ConditionItem<T> implements Iterator<Object[]> {
@@ -27,7 +28,7 @@ public class ConditionItem<T> implements Iterator<Object[]> {
 
 
     /**
-     * 没添加一组元素，就增加表的长度，这两个list的长度毕竟保证统一
+     * 添加一组元素，就增加表的长度，这两个list的长度毕竟保证统一
      *
      * @param opt
      * @param value
@@ -59,6 +60,11 @@ public class ConditionItem<T> implements Iterator<Object[]> {
 
     @Override
     public void remove() {
+        /*移除所有条件*/
+        this.opts.clear();
+        this.values.clear();
+        this.reset();
+        this.length = 0;
     }
 
     private void reset() {

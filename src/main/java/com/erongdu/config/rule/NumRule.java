@@ -56,19 +56,16 @@ public class NumRule extends AbstractRule<BigDecimal> {
             }
 
         }
+        boolean isMatch = false;
         if (policy == RulePolicy.MATCHALL) {
-            if (matchSet.contains(false)) {
-                this.isMatch = false;
-            } else {
-                this.isMatch = true;
+            if(!matchSet.contains(false)){
+                isMatch = true;
             }
         } else if (policy == RulePolicy.MATCHONE) {
             if (matchSet.contains(true)) {
-                this.isMatch = true;
-            } else {
-                this.isMatch = false;
+                isMatch = true;
             }
         }
-        return this.isMatch;
+        return isMatch;
     }
 }
