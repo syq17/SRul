@@ -1,12 +1,17 @@
 package com.erongdu.client;
 
-import com.erongdu.config.build.SimpleRuleBuilder;
+import com.erongdu.config.build.NumRuleBuilder;
 import com.erongdu.config.build.StringRuleBuilder;
+import com.erongdu.config.condition.ConditionItem;
+import com.erongdu.config.core.RulesExecutor;
+import com.erongdu.config.core.RulesLogic;
+import com.erongdu.config.rule.NumRule;
 import com.erongdu.config.rule.Rule;
 import com.erongdu.config.rule.StringRule;
-import com.erongdu.utils.ConditionOpt;
 import com.erongdu.utils.RulePolicy;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,28 +23,54 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
 
-        Map<String,Integer> load = new HashMap<>();
-        load.put("博士",3);
-        load.put("硕士",2);
-        load.put("学士",1);
+        Map<String, Integer> load = new HashMap<>();
+        load.put("博士", 3);
+        load.put("硕士", 2);
+        load.put("学士", 1);
 
         StringRuleBuilder stringRuleBuilder = new StringRuleBuilder(1, "education");
 
-
-        Map<String, String> conditionMap = new HashMap<>();
-        conditionMap.put(">=", "学士");
-        conditionMap.put(">=", "博士");
+        ConditionItem<String> conditionItem = stringRuleBuilder.conditionItem();
+        conditionItem.add(">=", "学士");
+        conditionItem.add(">=", "博士");
 
         StringRule rule = stringRuleBuilder.rulePolicy(RulePolicy.MATCHONE).preLoad(load)
-                .conditionManagement().createConditions(conditionMap).build();
+                .conditionManagement().createConditions(conditionItem).build();
 
         rule.matchTo("学士");
 
-        rule.beginMatch();
+//        rule.beginMatch();
+//
+//        System.out.println(rule.result());
 
-        System.out.println(rule.result());
+
+        NumRuleBuilder numRuleBuilder = new NumRuleBuilder(2, "age");
+
+        ConditionItem<BigDecimal> conditionItem2 = numRuleBuilder.conditionItem();
+        conditionItem2.add(">=", new BigDecimal(20));
+        conditionItem2.add(">=", new BigDecimal(30));
+
+        NumRule rule2 = numRuleBuilder.rulePolicy(RulePolicy.MATCHALL).conditionManagement().createConditions(conditionItem2).build();
+
+        rule2.matchTo(new BigDecimal(10));
+
+//        rule2.beginMatch();
+//
+//        System.out.println(rule2.result());
+
+        List<Rule> list = new ArrayList<>();
+        list.add(rule);
+        list.add(rule2);
+
+        RulesLogic rulesLogic = RulesExecutor.newNoneRelationRulesLogic();
+
+        rulesLogic.doLogic(list);
+        Map<Long, Boolean> resultMap = rulesLogic.rulesResult();
+        System.out.println(resultMap);
 
 
+//        rulesLogic.doLogic();
+//        rulesLogic.rulesResult();
     }
 
 

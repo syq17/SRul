@@ -64,9 +64,8 @@ public final class StringRule extends AbstractRule<String> {
                     matchSet.add(matchSortId != valueSortId);
                     break;
                 default:
-                    break;
+                    throw new RuleValueException("opt : " + opt + " is not accepted! ");
             }
-
         }
 
         if (policy == RulePolicy.MATCHALL) {

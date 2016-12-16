@@ -1,8 +1,5 @@
 package com.erongdu.config.condition;
 
-import com.erongdu.config.build.RuleBuilder;
-import com.erongdu.config.build.RuleConfigurerAdapter;
-import com.erongdu.config.rule.Rule;
 import com.erongdu.utils.ConditionOpt;
 
 /**

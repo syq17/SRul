@@ -2,13 +2,12 @@ package com.erongdu.config.build;
 
 import com.erongdu.config.condition.AbstractCondition;
 import com.erongdu.config.condition.Condition;
+import com.erongdu.config.condition.ConditionItem;
 import com.erongdu.config.rule.Rule;
 import com.erongdu.utils.ConditionOpt;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Condition 管理配置类
@@ -36,12 +35,13 @@ public final class ConditionManagementConfigurer<H, O extends Rule<H>, B extends
     }
 
 
-    public B createConditions(Map<String, H> map) {
-        Set<String> keys = map.keySet();
-        for (String key : keys) {
+    @SuppressWarnings("All")
+    public B createConditions(ConditionItem<H> conditionItem) {
+        while (conditionItem.hasNext()){
+            Object[] objs = conditionItem.next();
             AbstractCondition<H> condition = new AbstractCondition<>();
-            condition.opt(ConditionOpt.getOpt(key));
-            condition.value(map.get(key));
+            condition.opt(ConditionOpt.getOpt((String) objs[0]));
+            condition.value((H) objs[1]);
             conditions.add(condition);
         }
         return getBuilder();

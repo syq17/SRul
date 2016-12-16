@@ -1,6 +1,7 @@
 package com.erongdu.config.build;
 
 import com.erongdu.config.condition.Condition;
+import com.erongdu.config.condition.ConditionItem;
 import com.erongdu.config.rule.Rule;
 import com.erongdu.exception.RuleBuildException;
 import com.erongdu.utils.RulePolicy;
@@ -33,6 +34,9 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
     private ConditionManagementConfigurer<H, O, SimpleRuleBuilder<H, O>> configurerAdapter;//条件配置器
 
 
+    private ConditionItem<H> conditionItem;
+
+
     @SuppressWarnings("unchecked")
     public SimpleRuleBuilder(long id, String column) {
         super();
@@ -55,6 +59,14 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
             this.configurerAdapter.setBuilder(this);
         }
         return this.configurerAdapter;
+    }
+
+
+    public ConditionItem<H> conditionItem() {
+        if (this.conditionItem == null) {
+            this.conditionItem = new ConditionItem<>();
+        }
+        return this.conditionItem;
     }
 
 
@@ -81,7 +93,6 @@ public abstract class SimpleRuleBuilder<H, O extends Rule<H>> extends AbstractRu
         this.load = loadMap;
         return this;
     }
-
 
 
     /**
