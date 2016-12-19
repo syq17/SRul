@@ -27,7 +27,7 @@ public class Client {
         load.put("硕士", 2);
         load.put("学士", 1);
 
-        /*创建string类型的规则builder*/
+        /*创建string类型的规则builder，所有类型的builder都是单例，只需创建一次即可*/
         RuleBuilder<String> ruleBuilder = RuleBuilderCreator.stringRuleBuilder();
 
         /*创建条件项，该实例对应每一条规则*/
