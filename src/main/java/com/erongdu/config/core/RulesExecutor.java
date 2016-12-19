@@ -1,7 +1,7 @@
 package com.erongdu.config.core;
 
 
-import com.erongdu.config.rule2.Rule;
+import com.erongdu.config.rule.Rule;
 
 import java.util.List;
 

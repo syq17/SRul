@@ -1,9 +1,8 @@
-package com.erongdu.config.build2;
+package com.erongdu.config.build;
 
 
-import com.erongdu.config.condition.ConditionItem;
-import com.erongdu.config.rule2.Rule;
-import com.erongdu.config.rule2.RuleBasic;
+import com.erongdu.config.rule.Rule;
+import com.erongdu.config.rule.RuleBasic;
 import com.erongdu.utils.RulePolicy;
 
 import java.util.Map;

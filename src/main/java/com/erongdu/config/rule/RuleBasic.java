@@ -1,4 +1,4 @@
-package com.erongdu.config.rule2;
+package com.erongdu.config.rule;
 
 import com.erongdu.config.condition.Condition;
 import com.erongdu.utils.RulePolicy;

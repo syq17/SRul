@@ -1,124 +1,84 @@
-//package com.erongdu.config.build;
-//
-//import com.erongdu.config.build2.AbstractRuleBuilder;
-//import com.erongdu.config.condition.Condition;
-//import com.erongdu.config.condition.ConditionItem;
-//import com.erongdu.config.rule.Rule;
-//import com.erongdu.config.rule.RuleInfo;
-//import com.erongdu.exception.RuleBuildException;
-//import com.erongdu.utils.RulePolicy;
-//
-//import java.lang.reflect.Constructor;
-//import java.lang.reflect.ParameterizedType;
-//import java.lang.reflect.Type;
-//import java.util.List;
-//import java.util.Map;
-//
-///**
-// * 简单规则构造类
-// * Created by syq on 2016/12/9.
-// */
-//public abstract class SimpleRuleBuilder<H, T extends Rule<H>> extends AbstractRuleBuilder<H, Rule<H>> {
-//
-//
-//    protected RulePolicy rulePolicy = RulePolicy.MATCHALL;//该规则的策略，可选项，默认为全匹配
-//
-//    protected Map<H, Integer> load;//预加载项，可选项
-//
-//    protected String name;//规则名称，可选项
-//
-//    protected long id;//规则标识
-//
-//    protected String column;//目标字段名
-//
-//    protected Class<? extends RuleInfo> oClazz;
-//
-//    private ConditionManagementConfigurer<H, Rule<H>, SimpleRuleBuilder<H, T>> configurerAdapter;//条件配置器
-//
-//
-//    private ConditionItem<H conditionItem;
-//
-//
-//    @SuppressWarnings("unchecked")
-//    public SimpleRuleBuilder(long id, String column) {
-//        super();
-//        this.id = id;
-//        this.column = column;
-//
-//        Type type = getClass().getGenericSuperclass();
-//        this.oClazz = (Class<? extends RuleInfo>) ((ParameterizedType) type).getActualTypeArguments()[1];
-//    }
-//
-//
-//    /**
-//     * 获取条件管理器来配置条件的具体信息
-//     *
-//     * @return
-//     */
-//    public ConditionManagementConfigurer<H, Rule<H>, SimpleRuleBuilder<H, T>> conditionManagement() {
-//        if (configurerAdapter == null) {
-//            this.configurerAdapter = new ConditionManagementConfigurer<>();
-//            this.configurerAdapter.setBuilder(this);
-//        }
-//        return this.configurerAdapter;
-//    }
-//
-//
-//    public ConditionItem<H> conditionItem() {
-//        if (this.conditionItem == null) {
-//            this.conditionItem = new ConditionItem<>();
-//        }
-//        return this.conditionItem;
-//    }
-//
-//
-//    /**
-//     * 该方法定义这条规则中的各个条件之间是什么关系模式，如必须全部条件都匹配，还是只要其中一个条件匹配即可
-//     *
-//     * @param policy
-//     * @return
-//     */
-//    public SimpleRuleBuilder<H, T> rulePolicy(RulePolicy policy) {
-//        if (policy == null) throw new RuleBuildException("policy cannot be null");
-//        this.rulePolicy = policy;
-//        return this;
-//    }
-//
-//
-//    /**
-//     * 规则的预加载数据，比如字符串比对时所依赖的判断依据
-//     *
-//     * @param loadMap
-//     * @return
-//     */
-//    public SimpleRuleBuilder<H, T> preLoad(Map<H, Integer> loadMap) {
-//        this.load = loadMap;
-//        return this;
-//    }
-//
-//
-//    /**
-//     * 规则名称
-//     *
-//     * @param name
-//     * @return
-//     */
-//    public SimpleRuleBuilder<H, T> name(String name) {
-//        this.name = name;
-//        return this;
-//    }
-//
-//
-//
-//    @Override
-//    @SuppressWarnings("All")
-//    protected Rule<H> doBuild() throws Exception {
-//        Constructor<? extends RuleInfo> constructor = this.oClazz.getConstructor(List.class, RulePolicy.class, Map.class);
-//        List<Condition<H>> list = this.configurerAdapter.getConditions();
-//        RuleInfo oInstance = constructor.newInstance(list, this.rulePolicy, this.load);
-//        oInstance.setId(this.id);
-//        oInstance.setColumn(this.column);
-//        oInstance.setName(this.name);
-//        return (Rule<H>) oInstance;
-//    }
-//}
+package com.erongdu.config.build;
+
+import com.erongdu.config.condition.AbstractCondition;
+import com.erongdu.config.condition.Condition;
+import com.erongdu.config.condition.ConditionItem;
+import com.erongdu.config.rule.Rule;
+import com.erongdu.config.rule.RuleBasic;
+import com.erongdu.exception.RuleValueException;
+import com.erongdu.utils.ConditionOpt;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by syq on 2016/12/17.
+ */
+public abstract class SimpleRuleBuilder<H, T extends Rule> extends AbstractRuleBuilder<H, T> {
+
+
+    private Class<H> oClazz;
+
+
+    private RuleConfigurerAdapter<H, T, SimpleRuleBuilder<H, T>> ruleConfigurer;
+
+
+    @SuppressWarnings("All")
+    public SimpleRuleBuilder() {
+        super();
+        Type type = getClass().getGenericSuperclass();
+        this.oClazz = (Class<H>) ((ParameterizedType) type).getActualTypeArguments()[0];
+        this.ruleConfigurer = new SimpleRuleConfigurer<H, T, SimpleRuleBuilder<H, T>>();
+        this.ruleConfigurer.setBuilder(this);
+    }
+
+
+    @Override
+    @SuppressWarnings("All")
+    protected T doBuild() throws Exception {
+        RuleBasic ruleBasic = threadLocalRules.get();
+        return (T) ruleBasic;
+    }
+
+
+    @Override
+    public ConditionItem newConditionItems() {
+        return new ConditionItem();
+    }
+
+    @Override
+    public RuleConfigurer<H> newRule(long id, String column, ConditionItem conditionItem) throws IllegalAccessException
+            , InstantiationException {
+        RuleBasic<H> ruleBasic = concrete();
+        ruleBasic.setColumn(column);
+        ruleBasic.setId(id);
+        ruleBasic.setConditions(itemTolist(conditionItem));
+        ruleBasic.setValueType(oClazz);
+        threadLocalRules.set(ruleBasic);
+        return ruleConfigurer;
+    }
+
+
+    @SuppressWarnings("All")
+    private List<Condition<H>> itemTolist(ConditionItem conditionItem) throws RuleValueException{
+        List<Condition<H>> conditions = new ArrayList<>();
+        while (conditionItem.hasNext()) {
+            Object[] objs = conditionItem.next();
+            AbstractCondition<H> condition = new AbstractCondition<>();
+            condition.opt(ConditionOpt.getOpt((String) objs[0]));
+            if(objs[1] instanceof Long || objs[1] instanceof Integer || objs[1] instanceof Float){
+                objs[1] = Double.valueOf(objs[1].toString());
+            }
+            if (objs[1].getClass() != oClazz) {
+                throw new RuleValueException("item value :" + objs[1] + ",is not match to the type of " + oClazz.getName());
+            }
+            condition.value((H) objs[1]);
+            conditions.add(condition);
+        }
+        return conditions;
+    }
+}
+
+

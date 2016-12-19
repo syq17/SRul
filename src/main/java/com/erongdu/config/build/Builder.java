@@ -1,7 +1,7 @@
-package com.erongdu.config.build2;
+package com.erongdu.config.build;
 
-import com.erongdu.config.rule2.Rule;
-import com.erongdu.config.rule2.RuleBasic;
+import com.erongdu.config.rule.Rule;
+import com.erongdu.config.rule.RuleBasic;
 
 /**
  * Created by syq on 2016/12/18.

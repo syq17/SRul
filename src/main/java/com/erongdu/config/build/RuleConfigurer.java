@@ -1,27 +1,33 @@
-//package com.erongdu.config.build;
-//
-//import com.erongdu.config.build.RuleBuilder;
-//import com.erongdu.config.rule.Rule;
-//
-///**
-// * Created by syq on 2016/12/9.
-// */
-//public interface RuleConfigurer<H, O extends Rule<H>, B extends RuleBuilder<H, O>> {
-//
-////    /**
-////     * 将需要的builder进行初始化
-////     *
-////     * @param builder
-////     * @throws Exception
-////     */
-////    void newRule(B builder) throws Exception;
-////
-////    /**
-////     * 对builder进行配置
-////     *
-////     * @param builder
-////     * @throws Exception
-////     */
-////    void configure(B builder) throws Exception;
-//
-//}
+package com.erongdu.config.build;
+
+import com.erongdu.utils.RulePolicy;
+
+import java.util.Map;
+
+/**
+ * Created by syq on 2016/12/18.
+ */
+public interface RuleConfigurer<H> extends Builder {
+
+    /**
+     * define the rule policy , is match all or match one
+     *
+     * @param rulePolicy
+     * @return
+     */
+    RuleConfigurer<H> rulePolicy(RulePolicy rulePolicy);
+
+
+    /**
+     * load the string data to range the match value ,help machine to recognize
+     *
+     * @param map
+     * @return
+     */
+    RuleConfigurer<H> preLoad(Map<H, Integer> map);
+
+
+    RuleConfigurer<H> name(String name);
+
+
+}

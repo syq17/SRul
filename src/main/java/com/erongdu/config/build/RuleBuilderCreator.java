@@ -1,9 +1,9 @@
-package com.erongdu.config.build2;
+package com.erongdu.config.build;
 
 
 import com.erongdu.config.condition.Condition;
-import com.erongdu.config.rule2.AbstractRule;
-import com.erongdu.config.rule2.RuleBasic;
+import com.erongdu.config.rule.AbstractRule;
+import com.erongdu.config.rule.RuleBasic;
 import com.erongdu.exception.RuleValueException;
 import com.erongdu.utils.ConditionOpt;
 import com.erongdu.utils.RulePolicy;

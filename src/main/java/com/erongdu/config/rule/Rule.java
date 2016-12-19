@@ -1,46 +1,50 @@
-//package com.erongdu.config.rule;
-//
-//import com.erongdu.exception.RuleValueException;
-//
-///**
-// * 规则类总接口
-// * Created by syq on 2016/12/11.
-// */
-//public interface Rule<T> {
-//
-//
-//    /**
-//     * 需要去验证的值
-//     *
-//     * @param t
-//     */
-//    public void matchTo(T t) throws RuleValueException;
-//
-//
-//    /**
-//     * 获取该规则的id
-//     *
-//     * @return
-//     */
-//    public long id();
-//
-//
-//    /**
-//     * 获取该规则的目标字段名
-//     *
-//     * @return
-//     */
-//    public String column();
-//
-//    /**
-//     * 获取该规则的名称
-//     *
-//     * @return
-//     */
-//    public String name();
-//
-//
-//    public boolean beginMatch() throws RuleValueException;
-//
-//
-//}
+package com.erongdu.config.rule;
+
+import com.erongdu.exception.RuleValueException;
+
+/**
+ * user interface show method to use
+ * Created by syq on 2016/12/17.
+ */
+public interface Rule {
+
+
+    /**
+     * set the obj to be matched
+     *
+     * @param o
+     */
+    void matchTo(Object o) throws RuleValueException;
+
+
+    /**
+     * start match logic and give the result
+     *
+     * @return
+     */
+    boolean beginMatch() throws RuleValueException;
+
+
+    /**
+     * get id
+     *
+     * @return
+     */
+    public long getId();
+
+    /**
+     * get column name
+     *
+     * @return
+     */
+    public String getColumn();
+
+    /**
+     * get rule name
+     *
+     * @return
+     */
+    public String getName();
+
+
+}
