@@ -33,19 +33,4 @@ public interface Condition<T> {
 
     T getValue();
 
-    /**
-     * 返回构造器实例
-     *
-     * @return
-     */
-//    B finish();
-
-
-    /**
-     * 返回configurer实例
-     *
-     * @return
-     */
-//    H then();
-
 }
