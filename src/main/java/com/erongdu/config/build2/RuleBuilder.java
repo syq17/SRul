@@ -1,13 +1,6 @@
 package com.erongdu.config.build2;
 
-import com.erongdu.config.condition.Condition;
 import com.erongdu.config.condition.ConditionItem;
-import com.erongdu.config.rule.RuleInfo;
-import com.erongdu.config.rule2.Rule;
-import com.erongdu.config.rule2.RuleBasic;
-import com.erongdu.utils.RulePolicy;
-
-import java.util.Map;
 
 /**
  * user interface , show the method to use
@@ -25,7 +18,7 @@ public interface RuleBuilder<T> {
      *
      * @return
      */
-    ConditionItem<T> newConditionItems();
+    ConditionItem newConditionItems();
 
 
     /**
@@ -36,7 +29,7 @@ public interface RuleBuilder<T> {
      * @param conditionItem
      * @return
      */
-    RuleConfigurer<T> init(long id, String column, ConditionItem<T> conditionItem) throws IllegalAccessException, InstantiationException;
+    RuleConfigurer<T> newRule(long id, String column, ConditionItem conditionItem) throws IllegalAccessException, InstantiationException;
 
 
 }

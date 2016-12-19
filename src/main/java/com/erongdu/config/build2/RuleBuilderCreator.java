@@ -3,17 +3,12 @@ package com.erongdu.config.build2;
 
 import com.erongdu.config.condition.Condition;
 import com.erongdu.config.rule2.AbstractRule;
-import com.erongdu.config.rule2.Rule;
 import com.erongdu.config.rule2.RuleBasic;
 import com.erongdu.exception.RuleValueException;
 import com.erongdu.utils.ConditionOpt;
 import com.erongdu.utils.RulePolicy;
 
-import javax.xml.transform.sax.SAXTransformerFactory;
-import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,7 +21,7 @@ public class RuleBuilderCreator {
     private static final RuleBuilder<String> stringRuleBuilder = new StringRuleBuilder();
 
 
-    private static final RuleBuilder<BigDecimal> numRuleBuilder = new NumRuleBuilder();
+    private static final RuleBuilder<Double> numRuleBuilder = new NumRuleBuilder();
 
 
     private RuleBuilderCreator() {
@@ -39,7 +34,7 @@ public class RuleBuilderCreator {
     }
 
 
-    public static RuleBuilder<BigDecimal> numRuleBuilder() {
+    public static RuleBuilder<Double> numRuleBuilder() {
         return numRuleBuilder;
     }
 
@@ -54,11 +49,11 @@ public class RuleBuilderCreator {
     }
 
 
-    private static final class NumRuleBuilder extends SimpleRuleBuilder<BigDecimal, NumRule> {
+    private static final class NumRuleBuilder extends SimpleRuleBuilder<Double, NumRule> {
 
 
         @Override
-        protected RuleBasic<BigDecimal> concrete() {
+        protected RuleBasic<Double> concrete() {
             NumRule rule = new NumRule();
             return rule;
         }
@@ -81,9 +76,12 @@ public class RuleBuilderCreator {
                 if (!preLoad.containsKey(value)) {
                     throw new RuleValueException("value : " + value + " is not in the preLoad! ");
                 }
-                int valueSortId = preLoad.get(value);
+                Integer valueSortId = preLoad.get(value);
 
-                int matchSortId = preLoad.get(matchTo);
+                Integer matchSortId = preLoad.get(matchTo);
+                if(matchSortId == null) {
+                    throw new RuleValueException("matchTo value : " + matchTo + " is not found! ");
+                }
 
                 switch (opt) {
                     case BIGGER:
@@ -122,17 +120,17 @@ public class RuleBuilderCreator {
     }
 
 
-    final static class NumRule extends AbstractRule<BigDecimal> {
+    final static class NumRule extends AbstractRule<Double> {
 
 
         @Override
         public boolean beginMatch() throws RuleValueException {
         /*数字类型的比对，较为简单，直接比对即可*/
             Set<Boolean> matchSet = new HashSet<>();
-            for (Condition<BigDecimal> condition : this.conditions) {
+            for (Condition<Double> condition : this.conditions) {
 
                 ConditionOpt opt = condition.getOpt();
-                BigDecimal value = condition.getValue();
+                Double value = condition.getValue();
 
                 switch (opt) {
                     case BIGGER:

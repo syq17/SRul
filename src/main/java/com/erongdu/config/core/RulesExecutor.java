@@ -1,6 +1,7 @@
 package com.erongdu.config.core;
 
-import com.erongdu.config.rule.Rule;
+
+import com.erongdu.config.rule2.Rule;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class RulesExecutor {
             /*因为各个规则之间没有关系，所以不做算法比对*/
             for (Rule rule : list) {
                 boolean matchResult = rule.beginMatch();
-                this.resultMap.put(rule.id(), matchResult);
+                this.resultMap.put(rule.getId(), matchResult);
             }
             return true;
         }

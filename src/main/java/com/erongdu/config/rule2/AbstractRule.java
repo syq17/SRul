@@ -54,8 +54,11 @@ public abstract class AbstractRule<T> implements Rule, RuleBasic<T> {
     @Override
     @SuppressWarnings("All")
     public void matchTo(Object o) throws RuleValueException {
+        if (o instanceof Integer || o instanceof Long || o instanceof Float) {
+            o = Double.valueOf(o.toString());
+        }
         if (o.getClass() != valueClass) {
-            throw new RuleValueException("the match Object " + o.getClass().getName() + ",is not fit for the " + valueClass.getName());
+            throw new RuleValueException("the matchTo Object: " + o + " which type is " + o.getClass().getName() + ",is not fit for the " + valueClass.getName());
         }
         this.matchTo = (T) o;
     }

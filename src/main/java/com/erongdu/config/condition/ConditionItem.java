@@ -9,12 +9,12 @@ import java.util.List;
  * 非线程安全类
  * Created by syq on 2016/12/13.
  */
-public class ConditionItem<T> implements Iterator<Object[]> {
+public class ConditionItem implements Iterator<Object[]> {
 
 
     private List<String> opts;
 
-    private List<T> values;
+    private List<Object> values;
 
     private int point = 0;//初始化时循环计数point指向表头
 
@@ -33,7 +33,7 @@ public class ConditionItem<T> implements Iterator<Object[]> {
      * @param opt
      * @param value
      */
-    public void add(String opt, T value) {
+    public void add(String opt, Object value) {
         opts.add(opt);
         values.add(value);
         length++;
