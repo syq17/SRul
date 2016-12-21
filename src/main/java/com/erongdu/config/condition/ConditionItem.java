@@ -40,6 +40,7 @@ public class ConditionItem implements Iterator<Object[]> {
     }
 
 
+
     @Override
     public boolean hasNext() {
         if (point >= length) {

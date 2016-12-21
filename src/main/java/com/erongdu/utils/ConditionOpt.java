@@ -1,7 +1,5 @@
 package com.erongdu.utils;
 
-import com.erongdu.config.condition.Condition;
-
 /**
  * 条件的操作符常量
  * Created by syq on 2016/12/12.
@@ -14,7 +12,9 @@ public enum ConditionOpt {
     SMALL("<"),
     SMALL_EQUAL("<="),
     EQUAL("="),
-    NOT_EQUAL("!=");
+    NOT_EQUAL("!="),
+    INCLUDE("include"),
+    NOT_INCLUDE("exclude");
 
 
     private String value;

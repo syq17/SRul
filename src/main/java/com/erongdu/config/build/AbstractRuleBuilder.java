@@ -2,7 +2,6 @@ package com.erongdu.config.build;
 
 import com.erongdu.config.rule.Rule;
 import com.erongdu.config.rule.RuleBasic;
-import com.erongdu.exception.RuleBuildException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -20,11 +19,13 @@ public abstract class AbstractRuleBuilder<H, O extends Rule> implements RuleBuil
 
     @Override
     public O build() throws Exception {
-        if (this.building.compareAndSet(false, true)) {
-            object = doBuild();
-            return object;
-        }
-        throw new RuleBuildException("This object has already been built");
+//        if (this.building.compareAndSet(false, true)) {
+//            object = doBuild();
+//            return object;
+//        }
+//        throw new RuleBuildException("This object has already been built");
+        object = doBuild();
+        return object;
     }
 
     /**
@@ -52,6 +53,7 @@ public abstract class AbstractRuleBuilder<H, O extends Rule> implements RuleBuil
 
     /**
      * low level sub class tell the concrete rule type
+     *
      * @return
      */
     protected abstract RuleBasic<H> concrete();

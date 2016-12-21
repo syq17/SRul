@@ -11,6 +11,9 @@ import com.erongdu.utils.RulePolicy;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.erongdu.utils.ConditionOpt.INCLUDE;
+import static com.erongdu.utils.ConditionOpt.NOT_INCLUDE;
+
 /**
  * builder factory single instance
  * Created by syq on 2016/12/17.
@@ -43,8 +46,7 @@ public class RuleBuilderCreator {
 
         @Override
         protected RuleBasic<String> concrete() {
-            StringRule rule = new StringRule();
-            return rule;
+            return new StringRule();
         }
     }
 
@@ -54,8 +56,7 @@ public class RuleBuilderCreator {
 
         @Override
         protected RuleBasic<Double> concrete() {
-            NumRule rule = new NumRule();
-            return rule;
+            return new NumRule();
         }
     }
 
@@ -65,21 +66,36 @@ public class RuleBuilderCreator {
 
         @Override
         public boolean beginMatch() throws RuleValueException {
-            if (this.preLoad == null || this.preLoad.size() == 0) {
-                throw new RuleValueException("StringRule must have preLoad! ");
-            }
             Set<Boolean> matchSet = new HashSet<>();
             for (Condition<String> condition : this.conditions) {
                 ConditionOpt opt = condition.getOpt();
                 String value = condition.getValue();
 
-                if (!preLoad.containsKey(value)) {
+                if(this.matchTo == null){
+                    throw new RuleValueException("can not found mathTo value!");
+                }
+                if (opt == INCLUDE) {
+                    matchSet.add(value.contains(matchTo));
+                    continue;
+                }
+
+                if (opt == NOT_INCLUDE) {
+                    matchSet.add(!value.contains(matchTo));
+                    continue;
+                }
+
+                if (this.preLoad == null || this.preLoad.size() == 0) {
+                    throw new RuleValueException("StringRule must have preLoad! ");
+                }
+
+                if (this.preLoad != null && !this.preLoad.containsKey(value)) {
                     throw new RuleValueException("value : " + value + " is not in the preLoad! ");
                 }
+
                 Integer valueSortId = preLoad.get(value);
 
                 Integer matchSortId = preLoad.get(matchTo);
-                if(matchSortId == null) {
+                if (matchSortId == null) {
                     throw new RuleValueException("matchTo value : " + matchTo + " is not found! ");
                 }
 
@@ -97,7 +113,7 @@ public class RuleBuilderCreator {
                         matchSet.add(matchSortId <= valueSortId);
                         break;
                     case NOT_EQUAL:
-                        matchSet.add(matchSortId != valueSortId);
+                        matchSet.add(matchSortId.intValue() != valueSortId.intValue());
                         break;
                     default:
                         throw new RuleValueException("opt : " + opt + " is not accepted! ");
@@ -128,9 +144,12 @@ public class RuleBuilderCreator {
         /*数字类型的比对，较为简单，直接比对即可*/
             Set<Boolean> matchSet = new HashSet<>();
             for (Condition<Double> condition : this.conditions) {
-
                 ConditionOpt opt = condition.getOpt();
                 Double value = condition.getValue();
+
+                if(this.matchTo == null){
+                    throw new RuleValueException("can not found mathTo value!");
+                }
 
                 switch (opt) {
                     case BIGGER:
